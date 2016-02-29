@@ -1,0 +1,13 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- 窗口的背景颜色 -->
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
+    <style name="AppTheme" parent="@style/AppBaseTheme">
+    </style>
+
+    <style name="MainActivity2Theme" parent="AppBaseTheme">
+        <item name="android:windowFullscreen"  >true</item>
+    </style>
+</resources>
