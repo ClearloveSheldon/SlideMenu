@@ -38,28 +38,38 @@ public class SlideMenu extends HorizontalScrollView {
     }
 
     private void init(AttributeSet attrs) {
+        //解析自定义参数的值
         TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.SlideMenu);
         int menuLayoutId = typedArray.getResourceId(0, -1);
         int contentLayoutId = typedArray.getResourceId(1, -1);
         mMenuWidth = typedArray.getDimensionPixelOffset(2, 0);
+
+        //加载View
         mMenu = View.inflate(getContext(), menuLayoutId, null);
         mContent = View.inflate(getContext(), contentLayoutId, null);
 
+        //获取屏幕宽高
         DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
         mScreenWidth = displayMetrics.widthPixels;
         mScreenHeight = displayMetrics.heightPixels;
 
+        //设置为不能滑出边界(滑出边界的效果比较难看)
         setOverScrollMode(OVER_SCROLL_NEVER);
+
+        //设置无滚动条
         setHorizontalScrollBarEnabled(false);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        //设置测量的宽高为屏幕的宽高
         setMeasuredDimension(
                 mScreenWidth, mScreenHeight);
         if(!mHasInit){
+            //由于会多次测量，所以使用mHasInit保证布局只加载一次
             mHasInit = true;
+            //创建子View，并加到ScrollView中
             mWrapper = new LinearLayout(getContext());
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mMenuWidth+mScreenWidth,getMeasuredHeight());
             mWrapper.setOrientation(LinearLayout.HORIZONTAL);
@@ -76,6 +86,8 @@ public class SlideMenu extends HorizontalScrollView {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
         if(changed){
+            //将ScrollView滚动到mMenuWidth的位置，也就是滚动到跟内容View的左侧对其，让菜单栏刚好完全隐藏在屏幕左侧
+            //注意滚动的时机，当view有新的布局和尺寸时调用,也就是在初始化的时候去滚动。这个时候滚动才不会在打开页面时有滚动的效果
             scrollTo(mMenuWidth, 0);
         }
     }
